@@ -13,7 +13,7 @@ def get_user_top_tracks(username, api_key):
         'user': username,
         'api_key': api_key,
         'format': 'json',
-        'limit': 3000,  # adjust this value to fetch more or fewer tracks
+        'limit': 1000,  # adjust this value to fetch more or fewer tracks
         'page': 1
     }
     response = requests.get(url, params=payload)

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Overlap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        input {
+            font-size: 1rem;
+            padding: 0.25rem;
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        button {
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            background-color: #333;
+            color: #f4f4f4;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #output {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        a {
+            color: #1e87f0;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Find Music Overlap</h1>
+    <form id="overlap-form">
+        <label for="user1">User 1 Last.fm username:</label>
+        <input type="text" id="user1" name="user1" required>
+        <label for="user2">User 2 Last.fm username:</label>
+        <input type="text" id="user2" name="user2" required>
+        <button type="submit">Find Overlap</button>
+    </form>
+    <p id="output"></p>
+
+    <script>
+        const form = document.getElementById('overlap-form');
+        const output = document.getElementById('output');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const user1 = document.getElementById('user1').value;
+            const user2 = document.getElementById('user2').value;
+
+            output.textContent = 'Calculating overlap...';
+
+            try {
+                const response = await fetch('/api/overlap', {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    output.textContent = `Error: ${data.error}`;
+                    return;
+                }
+
+                const data = await response.json();
+                output.innerHTML = `<a href="/downloads/${data.filename}" download>Download Overlap CSV</a>`;
+            } catch (e) {
+                output.textContent = `Error: ${e.message}`;
+            }
+        });
+
+    </script>
+</body>
+
+</html>

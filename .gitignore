@@ -1,0 +1,5 @@
+.env
+.DS_Store
+ignore/
+album_covers/
+collage.jpg
